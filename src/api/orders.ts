@@ -11,6 +11,7 @@ import type {
   PaymentMethod,
   PaymentStatus,
   ShopCredit,
+  StoreSettings,
 } from './types'
 
 export interface OrderFilters {
@@ -46,4 +47,9 @@ export const shopsApi = {
   searchCustomers: (q: string) => api<CustomerOption[]>('/api/admin/shops/customers', { query: { q } }),
   setCredit: (userId: string, creditLimit: number, shopName?: string) =>
     api<ShopCredit>('/api/admin/shops/credit', { method: 'PUT', json: { userId, creditLimit, shopName } }),
+}
+
+export const settingsApi = {
+  get: () => api<StoreSettings>('/api/admin/settings'),
+  save: (body: StoreSettings) => api<StoreSettings>('/api/admin/settings', { method: 'PUT', json: body }),
 }

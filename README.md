@@ -38,6 +38,7 @@ If `node` is not found in a new terminal, load nvm first: `source ~/.nvm/nvm.sh`
 | Products | Table with search, category and status filters, paging; low/out-of-stock badges; bulk starting price |
 | Product editor | Details form with margin hint, bulk-price slab editor (checked like the backend before saving), photo upload / main photo / delete, hide or delete |
 | Categories | Add, rename, reorder, hide/show, delete (refused while products use it) |
+| Settings | Store open/closed, delivery charge, free delivery above, minimum order, UPI ID, store contact, GSTIN, FSSAI and whether to show them; checked like the backend before saving |
 | Banners | Add/edit, image upload, move up/down, hide/show, delete, with a preview of the slide |
 
 ## Layout

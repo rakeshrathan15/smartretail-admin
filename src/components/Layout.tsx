@@ -8,6 +8,7 @@ const links = [
   { to: '/banners', label: 'Banners' },
   { to: '/coupons', label: 'Coupons' },
   { to: '/shops', label: 'Shop credit' },
+  { to: '/settings', label: 'Settings' },
 ]
 
 export function Layout() {

@@ -10,6 +10,7 @@ import { OrderDetailPage } from './pages/OrderDetailPage'
 import { OrdersPage } from './pages/OrdersPage'
 import { ProductEditPage } from './pages/ProductEditPage'
 import { ProductsPage } from './pages/ProductsPage'
+import { SettingsPage } from './pages/SettingsPage'
 import { ShopsPage } from './pages/ShopsPage'
 
 export function App() {
@@ -37,6 +38,7 @@ export function App() {
         <Route path="banners" element={<BannersPage />} />
         <Route path="coupons" element={<CouponsPage />} />
         <Route path="shops" element={<ShopsPage />} />
+        <Route path="settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/orders" replace />} />
       </Route>
     </Routes>

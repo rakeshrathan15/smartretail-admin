@@ -249,3 +249,21 @@ export interface CustomerOption {
   email: string | null
   creditLimit: number | null
 }
+
+// ---- Store settings ---------------------------------------------------
+
+export interface StoreSettings {
+  storeName: string
+  storePhone: string
+  storeEmail: string
+  storeAddress: string
+  whatsappNumber: string
+  storeOpen: boolean
+  deliveryCharge: number
+  freeDeliveryAbove: number
+  minOrderValue: number
+  upiId: string
+  gstNumber: string
+  fssaiNumber: string
+  showCertifications: boolean
+}
