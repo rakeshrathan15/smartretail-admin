@@ -14,6 +14,7 @@ import { PickListPage } from './pages/PickListPage'
 import { ProductEditPage } from './pages/ProductEditPage'
 import { ProductsPage } from './pages/ProductsPage'
 import { SettingsPage } from './pages/SettingsPage'
+import { ShopDetailPage } from './pages/ShopDetailPage'
 import { ShopsPage } from './pages/ShopsPage'
 import { StoresPage } from './pages/StoresPage'
 
@@ -45,6 +46,7 @@ export function App() {
         <Route path="banners" element={<BannersPage />} />
         <Route path="coupons" element={<CouponsPage />} />
         <Route path="shops" element={<ShopsPage />} />
+        <Route path="shops/:id" element={<ShopDetailPage />} />
         <Route path="customers" element={<CustomersPage />} />
         <Route path="pick-list" element={<PickListPage />} />
         <Route

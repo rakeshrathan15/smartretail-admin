@@ -162,14 +162,15 @@ describe('admin orders', () => {
     let saved: unknown = null
     fakeBackend({
       'POST /api/auth/login': () => ({ status: 200, body: authBody() }),
-      'GET /api/admin/shops': () => ({ status: 200, body: [] }),
+      'GET /api/admin/shops': () => ({ status: 200, body: { items: [], page: 0, size: 25, totalItems: 0, totalPages: 0 } }),
+      'GET /api/admin/shops/summary': () => ({ status: 200, body: { totalShops: 0, activeShops: 0, creditOutstanding: 0, overLimit: 0 } }),
       'GET /api/admin/shops/customers': () => ({
         status: 200,
         body: [{ userId: 'u2', fullName: 'Ravi Kumar', shopName: 'Ravi Kirana', phone: '9876501234', email: null, creditLimit: null }],
       }),
       'PUT /api/admin/shops/credit': ({ body }) => {
         saved = body
-        return { status: 200, body: { id: 's1', ownerUserId: 'u2', name: 'Ravi Kirana', ownerPhone: '9876501234', creditLimit: 25000, outstanding: 0, active: true } }
+        return { status: 200, body: { id: 's1', ownerUserId: 'u2', name: 'Ravi Kirana', phone: '9876501234', creditLimit: 25000, outstanding: 0, overLimit: false, active: true } }
       },
     })
     const user = userEvent.setup()

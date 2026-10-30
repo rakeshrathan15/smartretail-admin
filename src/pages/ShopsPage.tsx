@@ -1,25 +1,90 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
-import { shopsApi } from '../api/orders'
-import type { CustomerOption, ShopCredit } from '../api/types'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useDeferredValue, useEffect, useState } from 'react'
+import { Link } from 'react-router'
+import { shopsApi, type ShopStanding } from '../api/shops'
+import type { CustomerOption } from '../api/types'
 import { Badge, Button, ErrorBanner, PageHeader, Spinner } from '../components/ui'
 import { formatRupees } from '../lib/format'
+import { ShopEditor } from './ShopEditor'
 
-/** Which shops may order on credit, how much, and what they owe. */
+/** What a shop owes, or the advance it has paid. */
+export function BalanceText({ outstanding }: { outstanding: number }) {
+  return outstanding < 0 ? <span className="text-green-700">{formatRupees(-outstanding)} paid in advance</span> : <>{formatRupees(outstanding)}</>
+}
+
+/** Every shop, what it owes, and who may order on credit. */
 export function ShopsPage() {
-  const shops = useQuery({ queryKey: ['shops'], queryFn: shopsApi.list })
-  const withCredit = shops.data?.filter((s) => s.creditLimit > 0) ?? []
+  const queryClient = useQueryClient()
+  const [search, setSearch] = useState('')
+  const [standing, setStanding] = useState<ShopStanding>('ALL')
+  const [page, setPage] = useState(0)
+  const [adding, setAdding] = useState(false)
+  const q = useDeferredValue(search.trim())
+
+  const summary = useQuery({ queryKey: ['shops', 'summary'], queryFn: shopsApi.summary })
+  const shops = useQuery({
+    queryKey: ['shops', 'list', { q, standing, page }],
+    queryFn: () => shopsApi.list({ q, standing, page }),
+    placeholderData: keepPreviousData,
+  })
+  const data = shops.data
 
   return (
     <>
       <PageHeader
-        title="Shop credit"
+        title="Shops"
         subtitle="Shops with a credit limit can choose “Credit” at checkout, up to the limit minus what they owe."
+        actions={!adding && <Button onClick={() => setAdding(true)}>+ New shop</Button>}
       />
+      {adding && (
+        <ShopEditor
+          shop={null}
+          onCancel={() => setAdding(false)}
+          onDone={() => {
+            setAdding(false)
+            queryClient.invalidateQueries({ queryKey: ['shops'] })
+          }}
+        />
+      )}
+      {summary.data && (
+        <dl className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <Stat label="Active shops" value={summary.data.activeShops} />
+          <Stat label="Total shops" value={summary.data.totalShops} />
+          <Stat label="Credit outstanding" value={formatRupees(summary.data.creditOutstanding)} />
+          <Stat label="Over limit" value={summary.data.overLimit} />
+        </dl>
+      )}
       <GiveCredit />
-      <ErrorBanner message={shops.error?.message} />
 
-      <div className="card mt-4 overflow-x-auto">
+      <div className="mt-4 mb-3 flex flex-wrap gap-2">
+        <input
+          className="input max-w-sm"
+          type="search"
+          aria-label="Search shops"
+          placeholder="Search by shop name, phone, city"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value)
+            setPage(0)
+          }}
+        />
+        <select
+          className="input w-auto"
+          aria-label="Standing"
+          value={standing}
+          onChange={(e) => {
+            setStanding(e.target.value as ShopStanding)
+            setPage(0)
+          }}
+        >
+          <option value="ALL">All shops</option>
+          <option value="OWING">Owing money</option>
+          <option value="OVER_LIMIT">Over limit</option>
+        </select>
+      </div>
+      <ErrorBanner message={shops.error?.message ?? summary.error?.message} />
+
+      <div className="card overflow-x-auto">
         {shops.isPending ? (
           <div className="p-8 text-center">
             <Spinner />
@@ -29,50 +94,71 @@ export function ShopsPage() {
             <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
               <tr>
                 <th className="px-4 py-3">Shop</th>
+                <th className="px-4 py-3">City</th>
+                <th className="px-4 py-3">Route</th>
                 <th className="px-4 py-3 text-right">Owes</th>
-                <th className="px-4 py-3 text-right">Available</th>
-                <th className="px-4 py-3">Credit limit (₹)</th>
+                <th className="px-4 py-3 text-right">Limit</th>
+                <th className="px-4 py-3">Status</th>
               </tr>
             </thead>
             <tbody>
-              {withCredit.length === 0 && (
+              {data?.items.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-slate-500">
-                    No shops have credit yet. Find a shop above to give credit.
+                  <td colSpan={6} className="p-8 text-center text-slate-500">
+                    No shops found.
                   </td>
                 </tr>
               )}
-              {withCredit.map((shop) => (
-                <ShopRow key={shop.id} shop={shop} />
+              {data?.items.map((shop) => (
+                <tr key={shop.id} className="border-b border-slate-100 last:border-0">
+                  <td className="px-4 py-3">
+                    <Link className="font-medium text-brand underline" to={`/shops/${shop.id}`}>
+                      {shop.name}
+                    </Link>
+                    {shop.phone && <div className="text-xs text-slate-500">+91 {shop.phone}</div>}
+                  </td>
+                  <td className="px-4 py-3">{shop.city ?? '—'}</td>
+                  <td className="px-4 py-3">{shop.routeName ?? '—'}</td>
+                  <td className="px-4 py-3 text-right">
+                    <BalanceText outstanding={shop.outstanding} />
+                  </td>
+                  <td className="px-4 py-3 text-right">{formatRupees(shop.creditLimit)}</td>
+                  <td className="space-x-1 px-4 py-3 whitespace-nowrap">
+                    {shop.overLimit && <Badge tone="red">OVER LIMIT</Badge>}
+                    {shop.active ? <Badge tone="green">Active</Badge> : <Badge tone="gray">Inactive</Badge>}
+                  </td>
+                </tr>
               ))}
             </tbody>
           </table>
         )}
       </div>
-      <p className="mt-3 text-xs text-slate-500">
-        “Owes” is credit orders that are not cancelled, minus repayments. Recording repayments comes with the credit
-        ledger.
-      </p>
+
+      {data && data.totalPages > 1 && (
+        <div className="mt-3 flex items-center justify-between text-sm">
+          <span className="text-slate-500">
+            Showing page {data.page + 1} of {data.totalPages} ({data.totalItems} shops)
+          </span>
+          <div className="flex gap-2">
+            <Button variant="secondary" disabled={page === 0} onClick={() => setPage(page - 1)}>
+              Previous
+            </Button>
+            <Button variant="secondary" disabled={page + 1 >= data.totalPages} onClick={() => setPage(page + 1)}>
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
     </>
   )
 }
 
-function ShopRow({ shop }: { shop: ShopCredit }) {
-  const available = shop.creditLimit - shop.outstanding
+function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <tr className="border-b border-slate-100 last:border-0">
-      <td className="px-4 py-3">
-        <div className="font-medium">{shop.name}</div>
-        {shop.ownerPhone && <div className="text-xs text-slate-500">+91 {shop.ownerPhone}</div>}
-      </td>
-      <td className="px-4 py-3 text-right">{formatRupees(shop.outstanding)}</td>
-      <td className="px-4 py-3 text-right">
-        {available < 0 ? <Badge tone="red">Over by {formatRupees(-available)}</Badge> : formatRupees(available)}
-      </td>
-      <td className="px-4 py-3">
-        {shop.ownerUserId ? <CreditLimitEditor userId={shop.ownerUserId} current={shop.creditLimit} /> : formatRupees(shop.creditLimit)}
-      </td>
-    </tr>
+    <div className="card p-3">
+      <dt className="text-xs text-slate-500">{label}</dt>
+      <dd className="text-lg font-semibold">{value}</dd>
+    </div>
   )
 }
 

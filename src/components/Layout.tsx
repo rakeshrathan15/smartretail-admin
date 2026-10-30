@@ -7,7 +7,7 @@ const links = [
   { to: '/categories', label: 'Categories' },
   { to: '/banners', label: 'Banners' },
   { to: '/coupons', label: 'Coupons' },
-  { to: '/shops', label: 'Shop credit' },
+  { to: '/shops', label: 'Shops' },
   { to: '/customers', label: 'Customers' },
   { to: '/pick-list', label: 'Pick-list' },
   { to: '/routes', label: 'Delivery routes' },

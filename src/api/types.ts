@@ -231,16 +231,6 @@ export interface Coupon {
 
 export type CouponInput = Omit<Coupon, 'id' | 'usedCount'>
 
-export interface ShopCredit {
-  id: string
-  ownerUserId: string | null
-  name: string
-  ownerPhone: string | null
-  creditLimit: number
-  outstanding: number
-  active: boolean
-}
-
 export interface CustomerOption {
   userId: string
   fullName: string | null

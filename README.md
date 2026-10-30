@@ -34,7 +34,8 @@ If `node` is not found in a new terminal, load nvm first: `source ~/.nvm/nvm.sh`
 | Orders | Today's numbers (orders, revenue, new to confirm, UPI to check, COD to collect); filters by status, payment, date and search; refreshes every 30 s |
 | Order detail | Items, totals, shop with tap-to-call, delivery address; buttons for the allowed next status (from the server); UPI screenshot with Payment received / Reject |
 | Coupons | Create and edit percentage or fixed coupons with minimum order, cap, usage limit and dates; turn on/off |
-| Shop credit | Find a shop owner and set a credit limit; see what each shop owes and has available |
+| Shops | Active, total, credit outstanding and over-limit totals; search and filter; OVER LIMIT flag; add a shop by hand; find a shop owner and set a credit limit |
+| Shop detail | Edit name, phone, GSTIN, address, route and limit; turn off; record a repayment (asks first if it is more than owed); orders on credit with what is still due; payments received with Void |
 | Products | Table with search, category and status filters, paging; low/out-of-stock badges; bulk starting price |
 | Product editor | Details form with margin hint, bulk-price slab editor (checked like the backend before saving), photo upload / main photo / delete, hide or delete |
 | Categories | Add, rename, reorder, hide/show, delete (refused while products use it) |

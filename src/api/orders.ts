@@ -3,14 +3,12 @@ import type {
   AdminOrder,
   Coupon,
   CouponInput,
-  CustomerOption,
   OrderRow,
   OrderStats,
   OrderStatus,
   Page,
   PaymentMethod,
   PaymentStatus,
-  ShopCredit,
   StoreSettings,
 } from './types'
 
@@ -40,13 +38,6 @@ export const couponsApi = {
   create: (body: CouponInput) => api<Coupon>('/api/admin/coupons', { method: 'POST', json: body }),
   update: (id: string, body: CouponInput) => api<Coupon>(`/api/admin/coupons/${id}`, { method: 'PUT', json: body }),
   remove: (id: string) => api<void>(`/api/admin/coupons/${id}`, { method: 'DELETE' }),
-}
-
-export const shopsApi = {
-  list: () => api<ShopCredit[]>('/api/admin/shops'),
-  searchCustomers: (q: string) => api<CustomerOption[]>('/api/admin/shops/customers', { query: { q } }),
-  setCredit: (userId: string, creditLimit: number, shopName?: string) =>
-    api<ShopCredit>('/api/admin/shops/credit', { method: 'PUT', json: { userId, creditLimit, shopName } }),
 }
 
 export const settingsApi = {
