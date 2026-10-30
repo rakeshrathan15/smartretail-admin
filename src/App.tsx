@@ -7,6 +7,8 @@ import { BannersPage } from './pages/BannersPage'
 import { CategoriesPage } from './pages/CategoriesPage'
 import { CouponsPage } from './pages/CouponsPage'
 import { CustomersPage } from './pages/CustomersPage'
+import { ExpensesPage } from './pages/ExpensesPage'
+import { InventoryPage } from './pages/InventoryPage'
 import { LoginPage } from './pages/LoginPage'
 import { OrderDetailPage } from './pages/OrderDetailPage'
 import { OrdersPage } from './pages/OrdersPage'
@@ -16,7 +18,9 @@ import { ProductsPage } from './pages/ProductsPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { ShopDetailPage } from './pages/ShopDetailPage'
 import { ShopsPage } from './pages/ShopsPage'
+import { StockReceiptsPage } from './pages/StockReceiptsPage'
 import { StoresPage } from './pages/StoresPage'
+import { SuppliersPage } from './pages/SuppliersPage'
 
 // Loaded on demand: the map library is large and only this screen uses it.
 const RoutesPage = lazy(() => import('./pages/RoutesPage').then((m) => ({ default: m.RoutesPage })))
@@ -58,6 +62,10 @@ export function App() {
           }
         />
         <Route path="stores" element={<StoresPage />} />
+        <Route path="inventory" element={<InventoryPage />} />
+        <Route path="stock-receipts" element={<StockReceiptsPage />} />
+        <Route path="suppliers" element={<SuppliersPage />} />
+        <Route path="expenses" element={<ExpensesPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/orders" replace />} />
       </Route>

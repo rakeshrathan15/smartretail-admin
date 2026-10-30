@@ -34,6 +34,10 @@ If `node` is not found in a new terminal, load nvm first: `source ~/.nvm/nvm.sh`
 | Orders | Today's numbers (orders, revenue, new to confirm, UPI to check, COD to collect); filters by status, payment, date and search; refreshes every 30 s |
 | Order detail | Items, totals, shop with tap-to-call, delivery address; buttons for the allowed next status (from the server); UPI screenshot with Payment received / Reject |
 | Coupons | Create and edit percentage or fixed coupons with minimum order, cap, usage limit and dates; turn on/off |
+| Inventory | Stock, cost, sell price, margin and value per product; LOW and OUT flags; search and filter; adjust stock with a reason; adjustment history |
+| Stock receipts | Receive stock from a supplier with a bill number, cases and cost per case; running total; past receipts with their lines |
+| Suppliers | Add, edit, turn off |
+| Expenses | Add, edit, delete; filter by date and category; totals |
 | Shops | Active, total, credit outstanding and over-limit totals; search and filter; OVER LIMIT flag; add a shop by hand; find a shop owner and set a credit limit |
 | Shop detail | Edit name, phone, GSTIN, address, route and limit; turn off; record a repayment (asks first if it is more than owed); orders on credit with what is still due; payments received with Void |
 | Products | Table with search, category and status filters, paging; low/out-of-stock badges; bulk starting price |

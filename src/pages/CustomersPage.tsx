@@ -2,7 +2,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useDeferredValue, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { customersApi, routesApi } from '../api/delivery'
-import { Badge, Button, ErrorBanner, PageHeader, Spinner } from '../components/ui'
+import { Badge, ErrorBanner, PageHeader, Pager, Spinner } from '../components/ui'
 import { formatDateTime } from '../lib/format'
 
 export function CustomersPage() {
@@ -109,21 +109,7 @@ export function CustomersPage() {
         )}
       </div>
 
-      {data && data.totalPages > 1 && (
-        <div className="mt-3 flex items-center justify-between text-sm">
-          <span className="text-slate-500">
-            Showing page {data.page + 1} of {data.totalPages} ({data.totalItems} customers)
-          </span>
-          <div className="flex gap-2">
-            <Button variant="secondary" disabled={page === 0} onClick={() => setPage(page - 1)}>
-              Previous
-            </Button>
-            <Button variant="secondary" disabled={page + 1 >= data.totalPages} onClick={() => setPage(page + 1)}>
-              Next
-            </Button>
-          </div>
-        </div>
-      )}
+      {data && <Pager page={data.page} totalPages={data.totalPages} totalItems={data.totalItems} noun="customers" onPage={setPage} />}
     </>
   )
 }

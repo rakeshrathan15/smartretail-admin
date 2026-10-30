@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { pickListApi, routesApi, type PickItem } from '../api/delivery'
-import { Button, ErrorBanner, Field, PageHeader, Spinner } from '../components/ui'
+import { Button, ErrorBanner, Field, PageHeader, Spinner, Stat } from '../components/ui'
 import { addDays, formatDay, formatRupees, todayInIndia } from '../lib/format'
 import { useLoadedChecklist } from '../lib/loadedChecklist'
 
@@ -150,14 +150,5 @@ export function PickListPage() {
         </>
       )}
     </>
-  )
-}
-
-function Stat({ label, value }: { label: string; value: string | number }) {
-  return (
-    <div className="card p-3">
-      <dt className="text-xs text-slate-500">{label}</dt>
-      <dd className="text-lg font-semibold">{value}</dd>
-    </div>
   )
 }

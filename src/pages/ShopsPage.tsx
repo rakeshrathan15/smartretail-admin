@@ -3,7 +3,7 @@ import { useDeferredValue, useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { shopsApi, type ShopStanding } from '../api/shops'
 import type { CustomerOption } from '../api/types'
-import { Badge, Button, ErrorBanner, PageHeader, Spinner } from '../components/ui'
+import { Badge, Button, ErrorBanner, PageHeader, Pager, Spinner, Stat } from '../components/ui'
 import { formatRupees } from '../lib/format'
 import { ShopEditor } from './ShopEditor'
 
@@ -134,31 +134,8 @@ export function ShopsPage() {
         )}
       </div>
 
-      {data && data.totalPages > 1 && (
-        <div className="mt-3 flex items-center justify-between text-sm">
-          <span className="text-slate-500">
-            Showing page {data.page + 1} of {data.totalPages} ({data.totalItems} shops)
-          </span>
-          <div className="flex gap-2">
-            <Button variant="secondary" disabled={page === 0} onClick={() => setPage(page - 1)}>
-              Previous
-            </Button>
-            <Button variant="secondary" disabled={page + 1 >= data.totalPages} onClick={() => setPage(page + 1)}>
-              Next
-            </Button>
-          </div>
-        </div>
-      )}
+      {data && <Pager page={data.page} totalPages={data.totalPages} totalItems={data.totalItems} noun="shops" onPage={setPage} />}
     </>
-  )
-}
-
-function Stat({ label, value }: { label: string; value: string | number }) {
-  return (
-    <div className="card p-3">
-      <dt className="text-xs text-slate-500">{label}</dt>
-      <dd className="text-lg font-semibold">{value}</dd>
-    </div>
   )
 }
 

@@ -173,8 +173,12 @@ function ProductEditor({ existing }: { existing: AdminProduct | null }) {
           </Section>
 
           <Section>
-            <Field label="Stock (cases)" error={errors.stockQuantity}>
-              {textInput('stockQuantity', { type: 'number', min: 0 })}
+            <Field
+              label={existing ? 'Stock (cases)' : 'Opening stock (cases)'}
+              error={errors.stockQuantity}
+              hint={existing ? 'Change it under Inventory or Stock receipts, so there is a record' : undefined}
+            >
+              {textInput('stockQuantity', { type: 'number', min: 0, disabled: existing !== null })}
             </Field>
             <Field label="Low-stock alert at" error={errors.lowStockThreshold}>
               {textInput('lowStockThreshold', { type: 'number', min: 0 })}

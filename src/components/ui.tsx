@@ -85,3 +85,43 @@ export function PageHeader({ title, subtitle, actions }: { title: string; subtit
     </div>
   )
 }
+
+export function Stat({ label, value }: { label: string; value: ReactNode }) {
+  return (
+    <div className="card p-3">
+      <dt className="text-xs text-slate-500">{label}</dt>
+      <dd className="text-lg font-semibold">{value}</dd>
+    </div>
+  )
+}
+
+export function Pager({
+  page,
+  totalPages,
+  totalItems,
+  noun,
+  onPage,
+}: {
+  page: number
+  totalPages: number
+  totalItems: number
+  noun: string
+  onPage: (page: number) => void
+}) {
+  if (totalPages <= 1) return null
+  return (
+    <div className="mt-3 flex items-center justify-between text-sm">
+      <span className="text-slate-500">
+        Showing page {page + 1} of {totalPages} ({totalItems} {noun})
+      </span>
+      <div className="flex gap-2">
+        <Button variant="secondary" disabled={page === 0} onClick={() => onPage(page - 1)}>
+          Previous
+        </Button>
+        <Button variant="secondary" disabled={page + 1 >= totalPages} onClick={() => onPage(page + 1)}>
+          Next
+        </Button>
+      </div>
+    </div>
+  )
+}

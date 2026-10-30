@@ -3,7 +3,7 @@ import { useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router'
 import { ApiError } from '../api/client'
 import { shopsApi, type ShopLedger, type ShopPayment } from '../api/shops'
-import { Badge, Button, ErrorBanner, Field, PageHeader, Spinner } from '../components/ui'
+import { Badge, Button, ErrorBanner, Field, PageHeader, Spinner, Stat } from '../components/ui'
 import { confirmAction } from '../lib/confirm'
 import { formatDateTime, formatRupees } from '../lib/format'
 import { ShopEditor } from './ShopEditor'
@@ -71,12 +71,10 @@ export function ShopDetailPage() {
       )}
 
       <dl className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Stat label="Owes">
-          <BalanceText outstanding={shop.outstanding} />
-        </Stat>
-        <Stat label="Credit limit">{formatRupees(shop.creditLimit)}</Stat>
-        <Stat label="Status">{shop.active ? <Badge tone="green">Active</Badge> : <Badge tone="gray">Inactive</Badge>}</Stat>
-        <Stat label="Standing">{shop.overLimit ? <Badge tone="red">OVER LIMIT</Badge> : <Badge tone="green">Within limit</Badge>}</Stat>
+        <Stat label="Owes" value={<BalanceText outstanding={shop.outstanding} />} />
+        <Stat label="Credit limit" value={formatRupees(shop.creditLimit)} />
+        <Stat label="Status" value={shop.active ? <Badge tone="green">Active</Badge> : <Badge tone="gray">Inactive</Badge>} />
+        <Stat label="Standing" value={shop.overLimit ? <Badge tone="red">OVER LIMIT</Badge> : <Badge tone="green">Within limit</Badge>} />
       </dl>
       <dl className="mb-4 grid gap-1 text-sm text-slate-600">
         {shop.gstin && <div>GSTIN: {shop.gstin}</div>}
@@ -229,14 +227,5 @@ function Payments({ shopId, payments, onChanged }: { shopId: string; payments: S
         </table>
       )}
     </section>
-  )
-}
-
-function Stat({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="card p-3">
-      <dt className="text-xs text-slate-500">{label}</dt>
-      <dd className="text-lg font-semibold">{children}</dd>
-    </div>
   )
 }
