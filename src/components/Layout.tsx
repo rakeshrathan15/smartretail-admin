@@ -8,6 +8,10 @@ const links = [
   { to: '/banners', label: 'Banners' },
   { to: '/coupons', label: 'Coupons' },
   { to: '/shops', label: 'Shop credit' },
+  { to: '/customers', label: 'Customers' },
+  { to: '/pick-list', label: 'Pick-list' },
+  { to: '/routes', label: 'Delivery routes' },
+  { to: '/stores', label: 'Stores' },
   { to: '/settings', label: 'Settings' },
 ]
 
@@ -17,7 +21,7 @@ export function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      <aside className="flex shrink-0 flex-col bg-brand text-white md:w-56">
+      <aside className="flex shrink-0 flex-col bg-brand text-white md:w-56 print:hidden">
         <div className="flex items-center gap-2 px-5 py-4">
           <img src="/favicon.svg" alt="" className="h-8 w-8" />
           <div>
@@ -45,7 +49,7 @@ export function Layout() {
           </button>
         </div>
       </aside>
-      <main className="min-w-0 flex-1 p-4 md:p-8">
+      <main className="min-w-0 flex-1 p-4 md:p-8 print:p-0">
         <Outlet />
       </main>
     </div>

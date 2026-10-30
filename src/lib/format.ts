@@ -22,3 +22,17 @@ export function formatDateTime(iso: string): string {
 export function todayInIndia(): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date())
 }
+
+/** yyyy-mm-dd plus some days, for date inputs. */
+export function addDays(date: string, days: number): string {
+  const moved = new Date(`${date}T00:00:00Z`)
+  moved.setUTCDate(moved.getUTCDate() + days)
+  return moved.toISOString().slice(0, 10)
+}
+
+const day = new Intl.DateTimeFormat('en-IN', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
+
+/** "Mon, 2 Nov" for a yyyy-mm-dd date. */
+export function formatDay(date: string): string {
+  return day.format(new Date(`${date}T00:00:00Z`))
+}

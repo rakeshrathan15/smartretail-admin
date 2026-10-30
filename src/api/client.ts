@@ -61,7 +61,7 @@ export function onSessionEnded(listener: () => void): () => void {
 }
 
 interface RequestOptions {
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
   json?: unknown
   form?: FormData
   query?: Record<string, string | number | boolean | undefined | null>

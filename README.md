@@ -38,6 +38,10 @@ If `node` is not found in a new terminal, load nvm first: `source ~/.nvm/nvm.sh`
 | Products | Table with search, category and status filters, paging; low/out-of-stock badges; bulk starting price |
 | Product editor | Details form with margin hint, bulk-price slab editor (checked like the backend before saving), photo upload / main photo / delete, hide or delete |
 | Categories | Add, rename, reorder, hide/show, delete (refused while products use it) |
+| Customers | Every shop with phone, city, PIN, route and join date; search and filter by route, including shops on no route |
+| Pick-list | Pick a route and delivery date: products with cases, units and value, a "Loaded ✓" tick per line (kept in this browser), the orders on the run, and a print view |
+| Delivery routes | Draw a route's area on OpenStreetMap (shape or circle) over the shop pins; days, store, colour, priority; "Reassign all shops" |
+| Stores | Add, edit, turn off or delete warehouses and branches |
 | Settings | Store open/closed, delivery charge, free delivery above, minimum order, UPI ID, store contact, GSTIN, FSSAI and whether to show them; checked like the backend before saving |
 | Banners | Add/edit, image upload, move up/down, hide/show, delete, with a preview of the slide |
 
