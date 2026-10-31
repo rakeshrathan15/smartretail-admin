@@ -27,7 +27,7 @@ export function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-brand p-4">
       <form onSubmit={submit} className="card w-full max-w-sm space-y-4 p-6">
         <div className="text-center">
-          <img src="/favicon.svg" alt="" className="mx-auto mb-3 h-12 w-12" />
+          <img src="/favicon.png" alt="" className="mx-auto mb-3 h-12 w-12" />
           <h1 className="text-xl font-semibold">S'Mart Retail Admin</h1>
           <p className="text-sm text-slate-500">Sign in to manage the catalog</p>
         </div>

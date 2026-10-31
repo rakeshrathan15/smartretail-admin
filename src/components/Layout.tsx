@@ -27,7 +27,7 @@ export function Layout() {
     <div className="flex min-h-screen flex-col md:flex-row">
       <aside className="flex shrink-0 flex-col bg-brand text-white md:w-56 print:hidden">
         <div className="flex items-center gap-2 px-5 py-4">
-          <img src="/favicon.svg" alt="" className="h-8 w-8" />
+          <img src="/favicon.png" alt="" className="h-8 w-8" />
           <div>
             <div className="font-semibold leading-tight">S'Mart Retail</div>
             <div className="text-xs text-white/70">Admin</div>
