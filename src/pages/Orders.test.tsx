@@ -144,7 +144,7 @@ describe('admin orders', () => {
     fakeBackend({
       'POST /api/auth/login': () => ({ status: 200, body: authBody() }),
       'GET /api/admin/orders/o1': () => ({ status: 200, body: { ...adminOrder('PLACED', 'PENDING', ['CONFIRMED', 'CANCELLED']), hasPaymentScreenshot: false } }),
-      'POST /api/admin/orders/o1/status': () => ({ status: 409, body: { detail: 'An order that is cancelled cannot be marked cancelled' } }),
+      'POST /api/admin/orders/o1/status': () => ({ status: 409, body: { message: 'An order that is cancelled cannot be marked cancelled' } }),
     })
     const confirm = vi.spyOn(window, 'confirm').mockReturnValueOnce(false).mockReturnValueOnce(true)
     const user = userEvent.setup()

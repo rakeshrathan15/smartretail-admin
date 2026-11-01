@@ -75,7 +75,7 @@ describe('settings', () => {
     fakeBackend({
       'POST /api/auth/login': () => ({ status: 200, body: authBody() }),
       'GET /api/admin/settings': () => ({ status: 200, body: seed }),
-      'PUT /api/admin/settings': () => ({ status: 400, body: { detail: 'Validation failed', errors: { storeAddress: 'size must be between 0 and 300' } } }),
+      'PUT /api/admin/settings': () => ({ status: 400, body: { message: 'Validation failed', details: { storeAddress: 'size must be between 0 and 300' } } }),
     })
     const user = userEvent.setup()
     renderApp('/settings')

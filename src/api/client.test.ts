@@ -29,7 +29,7 @@ describe('api client', () => {
   it('ends the session when the refresh token is rejected', async () => {
     fakeBackend({
       'GET /api/admin/categories': () => ({ status: 401 }),
-      'POST /api/auth/refresh': () => ({ status: 401, body: { detail: 'Session expired' } }),
+      'POST /api/auth/refresh': () => ({ status: 401, body: { message: 'Session expired' } }),
     })
     const ended = vi.fn()
     const unsubscribe = onSessionEnded(ended)
@@ -40,11 +40,11 @@ describe('api client', () => {
     unsubscribe()
   })
 
-  it('reads the message and field errors of a problem detail', async () => {
+  it('reads the message and field errors of an error', async () => {
     fakeBackend({
       'POST /api/admin/products': () => ({
         status: 400,
-        body: { detail: 'Validation failed', errors: { price: 'must not be null' } },
+        body: { message: 'Validation failed', details: { price: 'must not be null' } },
       }),
     })
     const error = (await api('/api/admin/products', { method: 'POST', json: {} }).catch((e: unknown) => e)) as ApiError

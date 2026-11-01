@@ -14,7 +14,7 @@ const sessionEndedListeners = new Set<() => void>()
 
 export class ApiError extends Error {
   readonly status: number
-  /** Validation messages by field, from the backend's problem-detail "errors" map. */
+  /** Validation messages by field, from the backend's "error.details" map. */
   readonly fieldErrors: Record<string, string>
 
   constructor(status: number, message: string, fieldErrors: Record<string, string> = {}) {
@@ -140,9 +140,9 @@ async function parse<T>(response: Response): Promise<T> {
   if (!response.ok) {
     throw new ApiError(
       response.status,
-      data?.detail ?? `Request failed (${response.status})`,
-      data?.errors ?? {},
+      data?.error?.message ?? `Request failed (${response.status})`,
+      data?.error?.details ?? {},
     )
   }
-  return data as T
+  return data?.data as T
 }

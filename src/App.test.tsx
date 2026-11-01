@@ -142,7 +142,7 @@ describe('admin app', () => {
       'GET /api/admin/categories': () => ({ status: 200, body: [] }),
       'POST /api/admin/products': () => ({
         status: 400,
-        body: { detail: 'Validation failed', errors: { barcode: 'size must be between 0 and 64' } },
+        body: { message: 'Validation failed', details: { barcode: 'size must be between 0 and 64' } },
       }),
     })
     const user = userEvent.setup()
