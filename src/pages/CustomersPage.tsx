@@ -2,7 +2,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useDeferredValue, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { customersApi, routesApi } from '../api/delivery'
-import { Badge, ErrorBanner, PageHeader, Pager, Spinner } from '../components/ui'
+import { Badge, ErrorBanner, PageHeader, Pager, Spinner, SearchInput } from '../components/ui'
 import { formatDateTime } from '../lib/format'
 
 export function CustomersPage() {
@@ -24,8 +24,8 @@ export function CustomersPage() {
     <>
       <PageHeader title="Customers" subtitle="Every registered shop, and the delivery route it is on." />
       <div className="mb-3 flex flex-wrap gap-2">
-        <input
-          className="input max-w-sm"
+        <SearchInput
+          className="max-w-sm"
           type="search"
           aria-label="Search customers"
           placeholder="Search shop, name, phone, city or PIN"

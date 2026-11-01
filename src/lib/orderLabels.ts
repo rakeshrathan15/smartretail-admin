@@ -1,4 +1,5 @@
 import type { OrderStatus, PaymentMethod, PaymentStatus } from '../api/types'
+import type { Tone } from '../components/ui'
 
 export const statusLabels: Record<OrderStatus, string> = {
   PLACED: 'New',
@@ -40,8 +41,6 @@ export const paymentStatusLabels: Record<PaymentStatus, string> = {
   REFUNDED: 'Refunded',
 }
 
-type Tone = 'green' | 'gray' | 'amber' | 'red' | 'blue'
-
 export const statusTone = (status: OrderStatus): Tone =>
   status === 'PLACED'
     ? 'amber'
@@ -49,7 +48,9 @@ export const statusTone = (status: OrderStatus): Tone =>
       ? 'green'
       : status === 'CANCELLED' || status === 'RETURNED'
         ? 'red'
-        : 'blue'
+        : status === 'PACKED'
+          ? 'violet'
+          : 'blue'
 
 export const paymentTone = (status: PaymentStatus): Tone =>
   status === 'PAID' ? 'green' : status === 'PENDING_VERIFICATION' ? 'amber' : status === 'FAILED' ? 'red' : 'gray'

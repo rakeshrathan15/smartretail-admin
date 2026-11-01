@@ -1,3 +1,4 @@
+import { queryOptions } from '@tanstack/react-query'
 import { api, apiBlob } from './client'
 import type {
   AdminOrder,
@@ -32,6 +33,16 @@ export const ordersApi = {
     api<AdminOrder>(`/api/admin/orders/${id}/payment-review`, { method: 'POST', json: { decision } }),
   paymentScreenshot: (id: string) => apiBlob(`/api/admin/orders/${id}/payment-screenshot`),
 }
+
+/** New orders show up without reloading the page. */
+export const ORDER_REFRESH_MS = 30_000
+
+/** Shared by the menu's count and the orders screen, so both update together. */
+export const orderStatsQuery = queryOptions({
+  queryKey: ['order-stats'],
+  queryFn: ordersApi.stats,
+  refetchInterval: ORDER_REFRESH_MS,
+})
 
 export const couponsApi = {
   list: () => api<Coupon[]>('/api/admin/coupons'),

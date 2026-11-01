@@ -58,7 +58,7 @@ function SettingsForm({ initial }: { initial: StoreSettings }) {
 
       <div className="space-y-4">
         <Section title="Taking orders">
-          <label className="flex items-center justify-between gap-4 rounded-md bg-slate-50 p-3 sm:col-span-2">
+          <label className="flex items-center justify-between gap-4 rounded-lg bg-slate-50 p-3 sm:col-span-2">
             <span>
               <span className="block font-medium">{form.storeOpen ? 'Store is open' : 'Store is closed'}</span>
               <span className="text-sm text-slate-500">

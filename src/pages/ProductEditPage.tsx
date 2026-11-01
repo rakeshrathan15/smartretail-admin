@@ -113,7 +113,7 @@ function ProductEditor({ existing }: { existing: AdminProduct | null }) {
       />
 
       {justCreated && (
-        <div className="mb-4 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
+        <div className="mb-4 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
           Product created. Add bulk prices and photos below.
         </div>
       )}
@@ -387,7 +387,7 @@ function ImagesEditor({ product }: { product: AdminProduct }) {
       <ErrorBanner message={error} />
       <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
         {images.map((image) => (
-          <figure key={image.id} className="overflow-hidden rounded-md border border-slate-200">
+          <figure key={image.id} className="overflow-hidden rounded-lg border border-slate-200">
             <img src={image.url} alt="" className="aspect-square w-full object-cover" />
             <figcaption className="flex items-center justify-between gap-1 p-2">
               {image.primary ? (
@@ -407,7 +407,7 @@ function ImagesEditor({ product }: { product: AdminProduct }) {
             </figcaption>
           </figure>
         ))}
-        <label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-300 text-sm text-slate-500 hover:border-brand hover:text-brand">
+        <label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 text-sm text-slate-500 hover:border-brand hover:text-brand">
           {uploading ? <Spinner /> : <span className="text-2xl">+</span>}
           <span>{uploading ? 'Uploading…' : 'Add photos'}</span>
           <input

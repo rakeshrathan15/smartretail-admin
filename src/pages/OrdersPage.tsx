@@ -1,9 +1,10 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { Banknote, Clock, IndianRupee, type LucideIcon, ShoppingBag, Smartphone } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
-import { ordersApi, type OrderFilters } from '../api/orders'
+import { ORDER_REFRESH_MS, orderStatsQuery, ordersApi, type OrderFilters } from '../api/orders'
 import type { OrderStatus, PaymentMethod, PaymentStatus } from '../api/types'
-import { Badge, Button, ErrorBanner, PageHeader, Spinner } from '../components/ui'
+import { Avatar, Badge, Button, ErrorBanner, PageHeader, SearchInput, Spinner } from '../components/ui'
 import { formatDateTime, formatRupees, todayInIndia } from '../lib/format'
 import {
   paymentMethodLabels,
@@ -12,9 +13,6 @@ import {
   statusLabels,
   statusTone,
 } from '../lib/orderLabels'
-
-/** New orders show up without reloading the page. */
-const REFRESH_MS = 30_000
 
 const statusFilters: { value: OrderStatus | ''; label: string }[] = [
   { value: '', label: 'All' },
@@ -69,39 +67,46 @@ export function OrdersPage() {
     return () => clearTimeout(timer)
   }, [search, q, update])
 
-  const stats = useQuery({ queryKey: ['order-stats'], queryFn: ordersApi.stats, refetchInterval: REFRESH_MS })
+  const stats = useQuery(orderStatsQuery)
   const orders = useQuery({
     queryKey: ['orders', filters],
     queryFn: () => ordersApi.list(filters),
     placeholderData: keepPreviousData,
-    refetchInterval: REFRESH_MS,
+    refetchInterval: ORDER_REFRESH_MS,
   })
 
   const today = todayInIndia()
   const data = orders.data
+  const counts = stats.data?.statusCounts
+  const tabCount = (status: OrderStatus | '') =>
+    !counts ? undefined : status ? (counts[status] ?? 0) : Object.values(counts).reduce((sum, n) => sum + n, 0)
   return (
     <>
       <PageHeader title="Orders" subtitle="Updates every 30 seconds." />
 
-      <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <StatCard label="Today's orders" value={stats.data?.todayOrders} onClick={() => update({ from: today, to: today, status: '', paymentStatus: '' })} />
-        <StatCard label="Today's revenue" value={stats.data && formatRupees(stats.data.todayRevenue)} />
+      <div className="mb-5 grid grid-cols-2 gap-3.5 lg:grid-cols-5">
+        <StatCard icon={ShoppingBag} iconTone="bg-brand-light text-brand" label="Today's orders" value={stats.data?.todayOrders} onClick={() => update({ from: today, to: today, status: '', paymentStatus: '' })} />
+        <StatCard icon={IndianRupee} iconTone="bg-green-100 text-green-700" label="Today's revenue" value={stats.data && formatRupees(stats.data.todayRevenue)} />
         <StatCard
+          icon={Clock}
+          iconTone="bg-amber-100 text-amber-800"
           label="New, to confirm"
           value={stats.data?.awaitingConfirmation}
           highlight={!!stats.data?.awaitingConfirmation}
           onClick={() => update({ status: 'PLACED', paymentStatus: '', from: '', to: '' })}
         />
         <StatCard
+          icon={Smartphone}
+          iconTone="bg-violet-100 text-violet-700"
           label="UPI to check"
           value={stats.data?.upiToVerify}
           highlight={!!stats.data?.upiToVerify}
           onClick={() => update({ paymentStatus: 'PENDING_VERIFICATION', status: '', from: '', to: '' })}
         />
-        <StatCard label="COD to collect" value={stats.data && formatRupees(stats.data.codToCollect)} />
+        <StatCard icon={Banknote} iconTone="bg-slate-100 text-slate-600" label="COD to collect" value={stats.data && formatRupees(stats.data.codToCollect)} />
       </div>
 
-      <div className="mb-3 flex flex-wrap gap-1" role="tablist" aria-label="Order status">
+      <div className="mb-3.5 flex gap-6 overflow-x-auto shadow-[inset_0_-1px_var(--color-line)]" role="tablist" aria-label="Order status">
         {statusFilters.map((s) => (
           <button
             key={s.value}
@@ -109,18 +114,22 @@ export function OrdersPage() {
             role="tab"
             aria-selected={(filters.status ?? '') === s.value}
             onClick={() => update({ status: s.value })}
-            className={`rounded-full px-3 py-1 text-sm ${
-              (filters.status ?? '') === s.value ? 'bg-brand text-white' : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50'
+            className={`flex items-center gap-1.5 border-b-2 pb-2.5 text-[13px] whitespace-nowrap ${
+              (filters.status ?? '') === s.value
+                ? 'border-brand font-semibold text-brand'
+                : 'border-transparent font-medium text-slate-500 hover:text-slate-900'
             }`}
           >
             {s.label}
+            {tabCount(s.value) !== undefined && (
+              <span className="rounded-full bg-slate-100 px-1.75 text-[11px] font-semibold text-slate-600">{tabCount(s.value)}</span>
+            )}
           </button>
         ))}
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <input
-          className="input max-w-xs"
+        <SearchInput
           placeholder="Order no., shop, name or phone"
           aria-label="Search orders"
           value={search}
@@ -170,12 +179,12 @@ export function OrdersPage() {
         <table className="w-full text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
             <tr>
-              <th className="px-4 py-3">Order</th>
-              <th className="px-4 py-3">Shop</th>
-              <th className="px-4 py-3 text-right">Cases</th>
-              <th className="px-4 py-3 text-right">Total</th>
-              <th className="px-4 py-3">Payment</th>
-              <th className="px-4 py-3">Status</th>
+              <th className="px-5 py-3">Order</th>
+              <th className="px-5 py-3">Shop</th>
+              <th className="px-5 py-3 text-right">Cases</th>
+              <th className="px-5 py-3 text-right">Total</th>
+              <th className="px-5 py-3">Payment</th>
+              <th className="px-5 py-3">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -195,24 +204,33 @@ export function OrdersPage() {
             )}
             {data?.items.map((o) => (
               <tr key={o.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                <td className="px-4 py-3">
-                  <Link to={`/orders/${o.id}`} className="font-medium text-brand hover:underline">
+                <td className="px-5 py-2.5 whitespace-nowrap">
+                  <Link to={`/orders/${o.id}`} className="font-semibold hover:text-brand hover:underline">
                     {o.orderNumber}
                   </Link>
                   <div className="text-xs text-slate-500">{formatDateTime(o.createdAt)}</div>
                 </td>
-                <td className="px-4 py-3">
-                  <div>{o.shopName ?? o.customerName ?? '—'}</div>
-                  {o.customerPhone && <div className="text-xs text-slate-500">+91 {o.customerPhone}</div>}
+                <td className="px-5 py-2.5">
+                  <div className="flex items-center gap-3">
+                    <Avatar name={o.shopName ?? o.customerName ?? '?'} />
+                    <div>
+                      <div className="font-medium">{o.shopName ?? o.customerName ?? '—'}</div>
+                      {o.customerPhone && <div className="text-xs text-slate-500">+91 {o.customerPhone}</div>}
+                    </div>
+                  </div>
                 </td>
-                <td className="px-4 py-3 text-right">{o.totalCases}</td>
-                <td className="px-4 py-3 text-right font-medium">{formatRupees(o.total)}</td>
-                <td className="px-4 py-3">
-                  <div className="text-xs text-slate-600">{paymentMethodLabels[o.paymentMethod]}</div>
-                  <Badge tone={paymentTone(o.paymentStatus)}>{paymentStatusLabels[o.paymentStatus]}</Badge>
+                <td className="px-5 py-2.5 text-right tabular-nums">{o.totalCases}</td>
+                <td className="px-5 py-2.5 text-right font-semibold tabular-nums">{formatRupees(o.total)}</td>
+                <td className="px-5 py-2.5">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <span className="whitespace-nowrap">{paymentMethodLabels[o.paymentMethod]}</span>
+                    <Badge tone={paymentTone(o.paymentStatus)}>{paymentStatusLabels[o.paymentStatus]}</Badge>
+                  </div>
                 </td>
-                <td className="px-4 py-3">
-                  <Badge tone={statusTone(o.status)}>{statusLabels[o.status]}</Badge>
+                <td className="px-5 py-2.5">
+                  <Badge dot tone={statusTone(o.status)}>
+                    {statusLabels[o.status]}
+                  </Badge>
                 </td>
               </tr>
             ))}
@@ -242,11 +260,15 @@ export function OrdersPage() {
 }
 
 function StatCard({
+  icon: Icon,
+  iconTone,
   label,
   value,
   highlight = false,
   onClick,
 }: {
+  icon: LucideIcon
+  iconTone: string
   label: string
   value: string | number | undefined
   highlight?: boolean
@@ -254,15 +276,19 @@ function StatCard({
 }) {
   const body = (
     <>
-      <div className="text-xs text-slate-500">{label}</div>
-      <div className={`mt-1 text-xl font-semibold ${highlight ? 'text-accent' : ''}`}>{value ?? '—'}</div>
+      <span className={`mb-2.5 flex h-8.5 w-8.5 items-center justify-center rounded-lg ${iconTone}`}>
+        <Icon size={18} strokeWidth={1.9} />
+      </span>
+      <div className="text-xs font-medium text-slate-500">{label}</div>
+      <div className="text-2xl font-bold tracking-tight tabular-nums">{value ?? '—'}</div>
     </>
   )
+  const look = `card p-4 text-left ${highlight ? 'border-amber-400 bg-amber-50' : ''}`
   return onClick ? (
-    <button type="button" onClick={onClick} className="card p-4 text-left hover:ring-2 hover:ring-brand/20">
+    <button type="button" onClick={onClick} className={`${look} hover:ring-2 hover:ring-brand/20`}>
       {body}
     </button>
   ) : (
-    <div className="card p-4">{body}</div>
+    <div className={look}>{body}</div>
   )
 }

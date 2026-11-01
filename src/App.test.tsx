@@ -86,7 +86,7 @@ describe('admin app', () => {
     expect(await screen.findByRole('link', { name: /Thums Up 750ml PET/ })).toBeInTheDocument()
     expect(screen.getByText('1 products')).toBeInTheDocument()
     expect(screen.getByText('3 low')).toBeInTheDocument()
-    expect(screen.getByText('bulk from ₹378')).toBeInTheDocument()
+    expect(screen.getByText('₹378')).toBeInTheDocument()
   })
 
   it('edits bulk prices and blocks invalid slabs before sending', async () => {

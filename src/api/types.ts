@@ -168,6 +168,8 @@ export interface OrderStats {
   awaitingConfirmation: number
   upiToVerify: number
   codToCollect: number
+  /** Every order so far, by status. A status with no orders is left out. */
+  statusCounts?: Partial<Record<OrderStatus, number>>
 }
 
 export interface OrderAddress {

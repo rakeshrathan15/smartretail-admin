@@ -2,7 +2,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router'
 import { catalogApi } from '../api/catalog'
-import { Badge, Button, ErrorBanner, PageHeader, Spinner } from '../components/ui'
+import { Badge, Button, ErrorBanner, PageHeader, SearchInput, Spinner } from '../components/ui'
 import { formatRupees } from '../lib/format'
 
 const PAGE_SIZE = 20
@@ -71,8 +71,7 @@ export function ProductsPage() {
       />
 
       <div className="mb-4 flex flex-wrap gap-2">
-        <input
-          className="input max-w-xs"
+        <SearchInput
           placeholder="Search name, brand, flavour"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -109,58 +108,63 @@ export function ProductsPage() {
         <table className="w-full text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-left text-xs uppercase text-slate-500">
             <tr>
-              <th className="px-4 py-3">Product</th>
-              <th className="px-4 py-3">Category</th>
-              <th className="px-4 py-3 text-right">Price / case</th>
-              <th className="px-4 py-3 text-right">Stock (cases)</th>
-              <th className="px-4 py-3">Status</th>
+              <th className="px-5 py-3">Product</th>
+              <th className="px-5 py-3">Category</th>
+              <th className="px-5 py-3 text-right">Price / case</th>
+              <th className="px-5 py-3 text-right">Bulk from</th>
+              <th className="px-5 py-3 text-right">Stock (cases)</th>
+              <th className="px-5 py-3">Status</th>
             </tr>
           </thead>
           <tbody>
             {products.isPending && (
               <tr>
-                <td colSpan={5} className="p-8 text-center">
+                <td colSpan={6} className="p-8 text-center">
                   <Spinner />
                 </td>
               </tr>
             )}
             {data?.items.length === 0 && (
               <tr>
-                <td colSpan={5} className="p-8 text-center text-slate-500">
+                <td colSpan={6} className="p-8 text-center text-slate-500">
                   No products match these filters.
                 </td>
               </tr>
             )}
             {data?.items.map((p) => (
               <tr key={p.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                <td className="px-4 py-3">
-                  <Link to={`/products/${p.id}`} className="flex items-center gap-3">
+                <td className="px-5 py-2.5">
+                  <Link to={`/products/${p.id}`} className="flex min-w-56 items-center gap-3">
                     <Thumb url={p.imageUrl} />
                     <span>
-                      <span className="block font-medium text-brand hover:underline">{p.name}</span>
+                      <span className="block font-semibold hover:text-brand hover:underline">{p.name}</span>
                       <span className="text-xs text-slate-500">
                         {p.brand ?? 'No brand'} · {p.unitsPerCase}/case
                       </span>
                     </span>
                   </Link>
                 </td>
-                <td className="px-4 py-3">{p.categoryName ?? <span className="text-slate-400">None</span>}</td>
-                <td className="px-4 py-3 text-right">
-                  {formatRupees(p.price)}
-                  {p.lowestPrice < p.price && (
-                    <span className="block text-xs text-green-700">bulk from {formatRupees(p.lowestPrice)}</span>
-                  )}
+                <td className="px-5 py-2.5">{p.categoryName ?? <span className="text-slate-400">None</span>}</td>
+                <td className="px-5 py-2.5 text-right font-semibold tabular-nums">{formatRupees(p.price)}</td>
+                <td className="px-5 py-2.5 text-right text-green-700 tabular-nums">
+                  {p.lowestPrice < p.price ? formatRupees(p.lowestPrice) : <span className="text-slate-400">—</span>}
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-5 py-2.5 text-right font-semibold tabular-nums">
                   {p.stockQuantity === 0 ? (
-                    <Badge tone="red">Out of stock</Badge>
+                    <Badge dot tone="red">Out of stock</Badge>
                   ) : p.stockQuantity <= p.lowStockThreshold ? (
-                    <Badge tone="amber">{p.stockQuantity} low</Badge>
+                    <Badge dot tone="amber">{p.stockQuantity} low</Badge>
                   ) : (
                     p.stockQuantity
                   )}
                 </td>
-                <td className="px-4 py-3">{p.active ? <Badge tone="green">Active</Badge> : <Badge tone="gray">Hidden</Badge>}</td>
+                <td className="px-5 py-2.5">
+                  {p.active ? (
+                    <Badge dot tone="green">Active</Badge>
+                  ) : (
+                    <Badge dot tone="gray">Hidden</Badge>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -188,11 +192,11 @@ export function ProductsPage() {
   )
 }
 
-export function Thumb({ url, size = 'h-10 w-10' }: { url: string | null; size?: string }) {
+export function Thumb({ url, size = 'h-11 w-11' }: { url: string | null; size?: string }) {
   return url ? (
-    <img src={url} alt="" className={`${size} shrink-0 rounded object-cover`} />
+    <img src={url} alt="" className={`${size} shrink-0 rounded-lg object-cover`} />
   ) : (
-    <span className={`${size} flex shrink-0 items-center justify-center rounded bg-slate-200 text-xs text-slate-500`}>
+    <span className={`${size} flex shrink-0 items-center justify-center rounded-lg bg-slate-200 text-xs text-slate-500`}>
       No img
     </span>
   )

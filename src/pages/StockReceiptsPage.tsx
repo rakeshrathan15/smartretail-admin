@@ -263,7 +263,7 @@ function ProductSearch({ onPick }: { onPick: (product: InventoryRow) => void }) 
       </Field>
       <ErrorBanner message={results.error?.message} />
       {q.length >= 2 && results.data && (
-        <ul className="mt-1 max-w-md divide-y divide-slate-100 rounded-md border border-slate-200">
+        <ul className="mt-1 max-w-md divide-y divide-slate-100 rounded-lg border border-slate-200">
           {results.data.items.length === 0 && <li className="px-3 py-2 text-sm text-slate-500">No products found.</li>}
           {results.data.items.map((p) => (
             <li key={p.productId}>
