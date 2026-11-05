@@ -225,7 +225,7 @@ function RouteForm({ route, otherRoutes, onDone }: { route: DeliveryRoute | null
           {ALL_DAYS.map((day) => (
             <label
               key={day}
-              className={`cursor-pointer rounded-md border px-3 py-1.5 text-sm ${
+              className={`cursor-pointer rounded-lg border px-3 py-1.5 text-sm ${
                 form.days.includes(day) ? 'border-brand bg-brand text-white' : 'border-slate-300 bg-white text-slate-700'
               }`}
             >

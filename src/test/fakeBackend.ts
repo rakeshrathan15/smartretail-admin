@@ -1,5 +1,11 @@
 import { vi } from 'vitest'
 
+/** Puts a route's result in the backend's response shape: `data` on success, `error` on failure. */
+function envelope({ status, body }: { status: number; body?: unknown }) {
+  if (body === undefined) return null
+  return JSON.stringify(status < 400 ? { success: true, data: body } : { success: false, error: body })
+}
+
 export type Handler = (request: { url: URL; method: string; body: unknown; headers: Record<string, string> }) => {
   status: number
   body?: unknown
@@ -17,8 +23,8 @@ export function fakeBackend(routes: Record<string, Handler>) {
       calls.push({ method, path: url.pathname, url: url.toString(), auth: headers.Authorization })
       const body = typeof init.body === 'string' ? JSON.parse(init.body) : init.body
       const handler = routes[`${method} ${url.pathname}`]
-      const result = handler ? handler({ url, method, body, headers }) : { status: 404, body: { detail: 'Not found' } }
-      return new Response(result.body === undefined ? null : JSON.stringify(result.body), {
+      const result = handler ? handler({ url, method, body, headers }) : { status: 404, body: { message: 'Not found' } }
+      return new Response(envelope(result), {
         status: result.status,
         headers: { 'Content-Type': 'application/json' },
       })

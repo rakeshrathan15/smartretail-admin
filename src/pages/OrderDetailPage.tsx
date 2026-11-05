@@ -158,7 +158,7 @@ export function OrderDetailPage() {
             )}
             {admin.hasPaymentScreenshot && <Screenshot orderId={o.id} />}
             {admin.paymentNeedsReview && (
-              <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 p-3">
+              <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
                 <p className="mb-2">
                   Check that {formatRupees(o.total)} reached your UPI account, then:
                 </p>
@@ -200,7 +200,7 @@ function Screenshot({ orderId }: { orderId: string }) {
   if (!url) return <div className="mt-3"><Spinner /></div>
   return (
     <a href={url} target="_blank" rel="noreferrer" className="mt-3 block">
-      <img src={url} alt="UPI payment screenshot" className="max-h-96 rounded-md border border-slate-200" />
+      <img src={url} alt="UPI payment screenshot" className="max-h-96 rounded-lg border border-slate-200" />
       <span className="text-xs text-brand">Open full size</span>
     </a>
   )

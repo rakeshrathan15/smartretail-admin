@@ -2,7 +2,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import { useDeferredValue, useState, type FormEvent } from 'react'
 import { ApiError } from '../api/client'
 import { inventoryApi, type AdjustmentReason, type InventoryRow, type LevelFilter } from '../api/purchasing'
-import { Badge, Button, ErrorBanner, Field, PageHeader, Pager, Spinner, Stat } from '../components/ui'
+import { Badge, Button, ErrorBanner, Field, PageHeader, Pager, Spinner, Stat, SearchInput } from '../components/ui'
 import { formatDateTime, formatRupees } from '../lib/format'
 import {
   ADJUSTMENT_REASONS,
@@ -40,8 +40,8 @@ export function InventoryPage() {
         </dl>
       )}
       <div className="mb-3 flex flex-wrap gap-2">
-        <input
-          className="input max-w-sm"
+        <SearchInput
+          className="max-w-sm"
           type="search"
           aria-label="Search products"
           placeholder="Search products"

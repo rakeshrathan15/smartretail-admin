@@ -117,7 +117,7 @@ describe('delivery', () => {
     fakeBackend({
       ...login,
       'GET /api/admin/routes': () => ({ status: 200, body: [route] }),
-      'DELETE /api/admin/routes/r1': () => ({ status: 409, body: { detail: 'Warangal North has 3 orders; turn it off instead of deleting' } }),
+      'DELETE /api/admin/routes/r1': () => ({ status: 409, body: { message: 'Warangal North has 3 orders; turn it off instead of deleting' } }),
     })
     vi.stubGlobal('confirm', () => true)
     const user = userEvent.setup()

@@ -3,7 +3,7 @@ import { useDeferredValue, useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { shopsApi, type ShopStanding } from '../api/shops'
 import type { CustomerOption } from '../api/types'
-import { Badge, Button, ErrorBanner, PageHeader, Pager, Spinner, Stat } from '../components/ui'
+import { Badge, Button, ErrorBanner, PageHeader, Pager, Spinner, Stat, SearchInput } from '../components/ui'
 import { formatRupees } from '../lib/format'
 import { ShopEditor } from './ShopEditor'
 
@@ -57,8 +57,8 @@ export function ShopsPage() {
       <GiveCredit />
 
       <div className="mt-4 mb-3 flex flex-wrap gap-2">
-        <input
-          className="input max-w-sm"
+        <SearchInput
+          className="max-w-sm"
           type="search"
           aria-label="Search shops"
           placeholder="Search by shop name, phone, city"

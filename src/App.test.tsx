@@ -86,7 +86,7 @@ describe('admin app', () => {
     expect(await screen.findByRole('link', { name: /Thums Up 750ml PET/ })).toBeInTheDocument()
     expect(screen.getByText('1 products')).toBeInTheDocument()
     expect(screen.getByText('3 low')).toBeInTheDocument()
-    expect(screen.getByText('bulk from ₹378')).toBeInTheDocument()
+    expect(screen.getByText('₹378')).toBeInTheDocument()
   })
 
   it('edits bulk prices and blocks invalid slabs before sending', async () => {
@@ -142,7 +142,7 @@ describe('admin app', () => {
       'GET /api/admin/categories': () => ({ status: 200, body: [] }),
       'POST /api/admin/products': () => ({
         status: 400,
-        body: { detail: 'Validation failed', errors: { barcode: 'size must be between 0 and 64' } },
+        body: { message: 'Validation failed', details: { barcode: 'size must be between 0 and 64' } },
       }),
     })
     const user = userEvent.setup()

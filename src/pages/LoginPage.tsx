@@ -24,7 +24,7 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-brand p-4">
+    <div className="flex min-h-screen items-center justify-center bg-brand-gradient p-4">
       <form onSubmit={submit} className="card w-full max-w-sm space-y-4 p-6">
         <div className="text-center">
           <img src="/favicon.png" alt="" className="mx-auto mb-3 h-12 w-12" />

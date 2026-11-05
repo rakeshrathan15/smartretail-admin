@@ -120,7 +120,7 @@ function BannerCard({
   return (
     <div className="card flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
       <div
-        className="relative flex h-28 w-full shrink-0 flex-col justify-center overflow-hidden rounded-md bg-gradient-to-r from-brand to-blue-500 p-4 text-white sm:w-72"
+        className="relative flex h-28 w-full shrink-0 flex-col justify-center overflow-hidden rounded-lg bg-gradient-to-r from-brand to-blue-500 p-4 text-white sm:w-72"
         style={banner.imageUrl ? { backgroundImage: `linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)), url(${banner.imageUrl})`, backgroundSize: 'cover' } : undefined}
       >
         <div className="truncate font-semibold">{banner.title}</div>
